@@ -1,0 +1,36 @@
+import pandas as pd
+
+data = {
+    'Title': ['KGF', 'LOVE TODAY', 'MARCO', 'AFTER EVERYTHING', 'EVIL DEAD','SALAR','INDIAN 2','NIGHTCRAWEL','AFTER WE COLLAIDED','CONJURIEN'],
+    'Genre': ['Action', 'Drama', 'Crime thriller', 'Romance', 'Horrer','Action', 'Drama', 'Crime thriller', 'Romance', 'Horrer']
+}
+
+df = pd.DataFrame(data)
+
+def genre_similarity(input_genre, book_genre):
+    return 1 if input_genre.lower() == book_genre.lower() else 0
+
+def recommend_books(user_input, df):
+    print(f"Your input genre: {user_input}")
+    
+    sim_scores = []
+    
+    for idx, genre in df['Genre'].items():
+        score = genre_similarity(user_input, genre)
+        if score > 0:  
+            sim_scores.append((idx, score))
+   
+    sim_scores.sort(key=lambda x: x[1], reverse=True)
+    
+  
+    recommended_indices = [score[0] for score in sim_scores if df['Genre'][score[0]] != user_input]
+    
+    print("\nMovies recommended for you:")
+    if recommended_indices:
+        for idx in recommended_indices[:3]: 
+            print(f"- {df['Title'][idx]}")
+    else:
+        print("No recommendations found.")
+
+user_input = input("Enter your preferred genre (e.g., 'Action', 'Romance'): ")
+recommend_books(user_input, df)
